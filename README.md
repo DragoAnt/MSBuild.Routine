@@ -11,6 +11,8 @@
 This repository contains common MSBuild routines and configurations used across company repositories. It provides standardized build settings, version
 management, and project configurations.
 
+You can copy this repository and adapt for your needs.
+
 ## Key Features
 
 ### Company-Specific Settings
