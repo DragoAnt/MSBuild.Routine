@@ -125,3 +125,14 @@ The repository includes support for managing secrets and sensitive information:
 ## Questions
 
 If you have questions or suggestions, feel free to write to [Issues](https://github.com/DragoAnt/MSBuild.Routine/issues).
+
+## Useful links
+
+* [MSBuild Binary and Structured Log Viewer](https://msbuildlog.com/).
+  Useful tool for MSBuild logs diagnostics. In Rider it will automatically open when build a project from
+  `ContextMenu > Advanced Build Actions > Rebuild Selected Project With Diagnostics`
+  An installation script below.
+
+    ```bash
+    winget install KirillOsenkov.MSBuildStructuredLogViewer
+    ```
