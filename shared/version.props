@@ -6,6 +6,7 @@
      * SemVer - Semantic version with build number based on $(CIPipelineId). https://semver.org/ (eg. 1.0.0, 1.0.0-pre-release.<buildNumber>)
      * SemVer4 - Kinda semantic version with build number based on $(CIPipelineId). (eg. 1.0.0.<buildNumber>, 1.0.0-pre-release.<buildNumber>)
      * VersionTag - Use git tag(<VersionTag>) as a version
+     * Manual - manual controlling version
   -->
 
   <PropertyGroup>
@@ -35,21 +36,29 @@
     </When>
     <When Condition="'$(IncrementVersionType)'=='SemVer'">
       <PropertyGroup>
-        <VersionSuffix Condition="'$(PreReleaseSuffix)'!=''">$(PreReleaseSuffix)test.$(BuildNumber)</VersionSuffix>
+        <VersionSuffix Condition="'$(PreReleaseSuffix)'!=''">-$(PreReleaseSuffix).$(BuildNumber)</VersionSuffix>
       </PropertyGroup>
     </When>
     <When Condition="'$(IncrementVersionType)'=='SemVer4'">
       <PropertyGroup>
-        <VersionPrefix>$(VersionPrefix).$(BuildNumber)</VersionPrefix>
-        <VersionSuffix Condition="'$(PreReleaseSuffix)'!=''">$(PreReleaseSuffix)</VersionSuffix>
+        <VersionSuffix>.$(BuildNumber)</VersionSuffix>
+        <VersionSuffix Condition="'$(PreReleaseSuffix)'!=''">-$(PreReleaseSuffix)$(VersionSuffix)</VersionSuffix>
       </PropertyGroup>
     </When>
     <When Condition="'$(IncrementVersionType)'=='VersionTag'">
       <PropertyGroup>
         <VersionPrefix />
+        <VersionSuffix />
+
         <Version>$(VersionTag)</Version>
-        <Version Condition="'$(VersionTag)'==''">Empty version tag</Version>
+        <Version Condition="'$(Version)'==''">Empty version tag</Version>
         <BuildNumber>0</BuildNumber>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(IncrementVersionType)'=='Manual'">
+      <PropertyGroup>
+        <VersionPrefix />
+        <VersionSuffix />
       </PropertyGroup>
     </When>
     <When Condition="'$(IncrementVersionType)'=='DevEnv'">
