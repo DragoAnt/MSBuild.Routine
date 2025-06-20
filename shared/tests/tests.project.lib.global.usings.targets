@@ -3,10 +3,7 @@
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Allowed="True" />
     <PackageReference Include="NSubstitute" Allowed="True" />
-    <PackageReference Include="NSubstitute.Analyzers.CSharp" Allowed="True">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="NSubstitute.Analyzers.CSharp" Allowed="True" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsTestsProject)'=='True'">

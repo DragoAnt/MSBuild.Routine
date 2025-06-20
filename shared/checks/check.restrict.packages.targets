@@ -15,22 +15,22 @@
       <!--         Trick from here https://philcupp.wordpress.com/2009/10/12/msbuild-tricks-i-don%E2%80%99t-want-to-forget/ -->
       <PackageReferenceNotAllowed Include="@(RestrictPackageReference)"
                                   Condition="'@(RestrictPackageReference)'!='' And '@(PackageReference)'!='' and '%(Identity)'!=''" />
-      <PackageReferenceNotAllowed Update="@(PackageReference)" Condition="'%(PackageReference.SkipRestriction)'=='True'"
-                                  SkipRestriction="True" />
+      <PackageReferenceNotAllowed Update="@(PackageReference)" Condition="'%(PackageReference.SkipGlobalRestriction)'=='True'"
+                                  SkipGlobalRestriction="True" />
 
     </ItemGroup>
 
-    <Error Condition="'%(PackageReferenceNotAllowed.Identity)'!='' And '%(PackageReferenceNotAllowed.Type)'=='Error' And '%(PackageReferenceNotAllowed.SkipRestriction)'!='True'"
-           Text="Using of package '%(PackageReferenceNotAllowed.Identity)' is prohibited. %(PackageReferenceNotAllowed.Message). You can skip this restriction with adding SkipRestriction=&quot;True&quot; to PackageReference."
+    <Error Condition="'%(PackageReferenceNotAllowed.Identity)'!='' And '%(PackageReferenceNotAllowed.Type)'=='Error' And '%(PackageReferenceNotAllowed.SkipGlobalRestriction)'!='True'"
+           Text="Using of package '%(PackageReferenceNotAllowed.Identity)' is prohibited. %(PackageReferenceNotAllowed.Message) You can skip this restriction with adding SkipGlobalRestriction=&quot;True&quot; to PackageReference."
            File="$(MSBuildProjectFullPath)" />
 
     <!--    Error with skip restriction-->
-    <Warning Condition="'%(PackageReferenceNotAllowed.Identity)'!='' And '%(PackageReferenceNotAllowed.Type)'=='Error' And '%(PackageReferenceNotAllowed.SkipRestriction)'=='True'"
+    <Warning Condition="'%(PackageReferenceNotAllowed.Identity)'!='' And '%(PackageReferenceNotAllowed.Type)'=='Error' And '%(PackageReferenceNotAllowed.SkipGlobalRestriction)'=='True'"
              Text="Using of package '%(PackageReferenceNotAllowed.Identity)' is prohibited. %(PackageReferenceNotAllowed.Message)"
              File="$(MSBuildProjectFullPath)" />
 
-    <Warning Condition="'%(PackageReferenceNotAllowed.Identity)'!='' And '%(PackageReferenceNotAllowed.Type)'=='Warning'"
-             Text="Using of package '%(PackageReferenceNotAllowed.Identity)' is restricted. %(PackageReferenceNotAllowed.Message)"
+    <Warning Condition="'%(PackageReferenceNotAllowed.Identity)'!='' And '%(PackageReferenceNotAllowed.Type)'=='Warning' And '%(PackageReferenceNotAllowed.SkipGlobalRestriction)'!='True'"
+             Text="Using of package '%(PackageReferenceNotAllowed.Identity)' is restricted. %(PackageReferenceNotAllowed.Message) You can skip this restriction with adding SkipGlobalRestriction=&quot;True&quot; to PackageReference."
              File="$(MSBuildProjectFullPath)" />
   </Target>
 

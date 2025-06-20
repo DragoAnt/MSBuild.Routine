@@ -1,5 +1,8 @@
 <Project>
 
+  <PropertyGroup>
+    <IsCodeAnalyzer>True</IsCodeAnalyzer>
+  </PropertyGroup>
   <ItemGroup>
     <None Update="lib\**\*" Pack="false" />
     <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />

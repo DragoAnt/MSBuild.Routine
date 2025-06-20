@@ -1,10 +1,12 @@
 <Project>
 
+  <Import Project="$(MSBuildThisFileDirectory)version.targets" />
+
   <Import Project="$(MSBuildThisFileDirectory)common\init.common.targets" />
 
   <Import Project="$(MSBuildThisFileDirectory)tests\tests.project.targets" />
 
-  <Import Condition="Exists('$(MSBuildThisFileDirectory)project.global.usings.targets')"
+  <Import Condition="'$(IsCodeAnalyzer)'!='True' And '$(IsSourceGenerator)'!='True'"
           Project="$(MSBuildThisFileDirectory)project.global.usings.targets" />
 
   <Import Condition="Exists('$(MSBuildThisFileDirectory)..\..\Directory.GlobalUsings.targets')"
@@ -42,14 +44,15 @@
 
   <!--  Always last-->
   <Import Project="$(MSBuildThisFileDirectory)common\init.common.final.targets" />
-  
+
   <Import Condition="Exists('$(MSBuildThisFileDirectory)..\..\Directory.PackageAsProj.targets')"
           Project="$(MSBuildThisFileDirectory)..\..\Directory.PackageAsProj.targets" />
 
-  <Import Condition="Exists('$(MSBuildThisFileDirectory)packageAsProj.routine.targets')"
-          Project="$(MSBuildThisFileDirectory)packageAsProj.routine.targets" />
+  <Import Project="$(MSBuildThisFileDirectory)project.global.metadata.targets" />
 
-  <Import Condition="Exists('$(MSBuildThisFileDirectory)checks\init.checks.targets')"
-          Project="$(MSBuildThisFileDirectory)checks\init.checks.targets" />
+  <Import Project="$(MSBuildThisFileDirectory)packageAsProj.routine.targets" />
 
+  <Import Project="$(MSBuildThisFileDirectory)checks\init.checks.targets" />
+
+  <Import Project="$(MSBuildThisFileDirectory)utils\readMetadata.targets" />
 </Project>
