@@ -6,8 +6,8 @@
     <PackageVersion Condition="'$(PackageVersion)'==''">$(Version)</PackageVersion>
     <IncludeSymbols Condition="'$(IncludeSymbols)'==''">false</IncludeSymbols>
 
-    <PackageIconPath Condition="'$(PackageIconPath)'==''">$(MSBuildThisFileDirectory)..\package.icon.png</PackageIconPath>
-    <PackageIcon Condition="Exists('$(PackageIconPath)')">icon.png</PackageIcon>
+    <PackageIconPath Condition="'$(PackageIconPath)'=='' And '$(PackageIcon)'==''">$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)..\..\package.icon.png'))</PackageIconPath>
+    <PackageIcon Condition="'$(PackageIcon)'=='' And '$(PackageIconPath)'!='' And Exists('$(PackageIconPath)')">icon.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
 
     <RepositoryType Condition="'$(RepositoryType)'==''">git</RepositoryType>
@@ -16,7 +16,7 @@
 
   <!--Packages details-->
   <ItemGroup>
-    <None Condition="Exists('$(PackageIconPath)')" Include="$(PackageIconPath)" Pack="true" PackagePath="\icon.png" Visible="false" />
+    <None Condition="'$(PackageIcon)'=='icon.png' And '$(PackageIconPath)'!='' And Exists('$(PackageIconPath)')" Include="$(PackageIconPath)" Pack="true" PackagePath="\icon.png" Visible="false" />
     <None Include="package.readme.md" Pack="true" PackagePath="\readme.md" />
 
     <!--    Include package controlled msbuild props and targets -->
