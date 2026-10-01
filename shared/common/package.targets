@@ -4,7 +4,9 @@
     <PackageId Condition="'$(PackageId)'==''">$(MSBuildProjectName)</PackageId>
     <Description Condition="'$(Description)'==''">$(MSBuildProjectName)</Description>
     <PackageVersion Condition="'$(PackageVersion)'==''">$(Version)</PackageVersion>
+    <IncludeSymbols Condition="'$(IncludeSymbols)'=='' And '$(IncludeBuildOutput)'!='false' And '$(DebugType)'!='embedded' And '$(DebugType)'!='none'">true</IncludeSymbols>
     <IncludeSymbols Condition="'$(IncludeSymbols)'==''">false</IncludeSymbols>
+    <SymbolPackageFormat Condition="'$(SymbolPackageFormat)'==''">snupkg</SymbolPackageFormat>
 
     <PackageIconPath Condition="'$(PackageIconPath)'=='' And '$(PackageIcon)'==''">$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)..\..\package.icon.png'))</PackageIconPath>
     <PackageIcon Condition="'$(PackageIcon)'=='' And '$(PackageIconPath)'!='' And Exists('$(PackageIconPath)')">icon.png</PackageIcon>
