@@ -7,7 +7,7 @@
     <FullManufacturerName>DragoAnt</FullManufacturerName>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
-    <RepositoryUrl>https://github.com/$(GITHUB_REPOSITORY)</RepositoryUrl>
+    <RepositoryUrl Condition="'$(RepositoryUrl)'=='' And '$(GITHUB_REPOSITORY)'!=''">https://github.com/$(GITHUB_REPOSITORY)</RepositoryUrl>
     <IsGitHubCI>True</IsGitHubCI>
 
     <IncrementVersionType Condition="'$(IncrementVersionType)'==''">VersionTag</IncrementVersionType>
