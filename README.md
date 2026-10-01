@@ -35,6 +35,21 @@ _You can copy this repository and adapt for your needs._
 - Warning treatment as errors
 - Documentation file generation for NuGet packages
 
+### Package Defaults
+
+Applied to packable projects; each one is used only when the project leaves the property empty, so set it in `Directory.Build.props` (before or after the
+import) or in a `.csproj` to override it.
+
+| Property                                | Default                                                                            |
+|-----------------------------------------|------------------------------------------------------------------------------------|
+| `PackageIcon` / `PackageIconPath`       | `package.icon.png` from the repository root, packed as `icon.png`                  |
+| `Copyright`                             | `Copyright (c) <current year> $(FullManufacturerName)`                             |
+| `RepositoryUrl`                         | `https://github.com/$(GITHUB_REPOSITORY)` on GitHub Actions; unset on local builds |
+| `PackageProjectUrl`                     | `$(RepositoryUrl)`                                                                 |
+| `IncludeSymbols`, `SymbolPackageFormat` | `true`, `snupkg` (off when the project has no separate pdb)                        |
+
+`dotnet nuget push <dir>/*.nupkg` also pushes the `.snupkg` that sits next to each package.
+
 ### Project Structure
 
 The repository is organized into several key directories:
