@@ -5,7 +5,7 @@
      * DateBased(Default) - yyyy.M.d.$([MSBuild]::Modulo($(CIPipelineId), $(MaxBuildNumber)))(-pre-release) (eg. 2025.5.30.1234, 2025.5.30.1234-pre-release)
      * SemVer - Semantic version with build number based on $(CIPipelineId). https://semver.org/ (eg. 1.0.0, 1.0.0-pre-release.<buildNumber>)
      * SemVer4 - Kinda semantic version with build number based on $(CIPipelineId). (eg. 1.0.0.<buildNumber>, 1.0.0-pre-release.<buildNumber>)
-     * VersionTag - Use git tag(<VersionTag>) as a version
+     * VersionTag - Use git tag(<VersionTag>) as a version, a leading v/V trimmed (eg. v1.2.3 -> 1.2.3); must be valid SemVer 2.0
      * Manual - manual controlling version
   -->
 
@@ -18,7 +18,7 @@
     <BuildNumber Condition="'$(BuildNumber)'==''">0</BuildNumber>
     <BuildNumber Condition="'$(IsDevEnv)'!='True'">$(CIPipelineId)</BuildNumber>
 
-    <PreReleaseSuffix Condition="'$(PreReleaseSuffix)'=='' AND '$(IsStableBranch)'!='True'">$(Branch.Replace('\','-').Replace('/','-'))</PreReleaseSuffix>
+    <PreReleaseSuffix Condition="'$(PreReleaseSuffix)'=='' AND '$(IsStableBranch)'!='True'">$([System.Text.RegularExpressions.Regex]::Replace('$(Branch)', '[^0-9A-Za-z-]', '-'))</PreReleaseSuffix>
   </PropertyGroup>
 
   <Choose>
@@ -36,13 +36,13 @@
     </When>
     <When Condition="'$(IncrementVersionType)'=='SemVer'">
       <PropertyGroup>
-        <VersionSuffix Condition="'$(PreReleaseSuffix)'!=''">-$(PreReleaseSuffix).$(BuildNumber)</VersionSuffix>
+        <VersionSuffix Condition="'$(PreReleaseSuffix)'!=''">$(PreReleaseSuffix).$(BuildNumber)</VersionSuffix>
       </PropertyGroup>
     </When>
     <When Condition="'$(IncrementVersionType)'=='SemVer4'">
       <PropertyGroup>
-        <VersionSuffix>.$(BuildNumber)</VersionSuffix>
-        <VersionSuffix Condition="'$(PreReleaseSuffix)'!=''">-$(PreReleaseSuffix)$(VersionSuffix)</VersionSuffix>
+        <VersionPrefix Condition="'$(PreReleaseSuffix)'==''">$(VersionPrefix).$(BuildNumber)</VersionPrefix>
+        <VersionSuffix Condition="'$(PreReleaseSuffix)'!=''">$(PreReleaseSuffix).$(BuildNumber)</VersionSuffix>
       </PropertyGroup>
     </When>
     <When Condition="'$(IncrementVersionType)'=='VersionTag'">
@@ -50,7 +50,7 @@
         <VersionPrefix />
         <VersionSuffix />
 
-        <Version>$(VersionTag)</Version>
+        <Version>$([System.Text.RegularExpressions.Regex]::Replace('$(VersionTag)', '^[vV]', ''))</Version>
         <Version Condition="'$(Version)'==''">Empty version tag</Version>
         <BuildNumber>0</BuildNumber>
       </PropertyGroup>

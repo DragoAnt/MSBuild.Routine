@@ -10,8 +10,8 @@
     <RepositoryUrl Condition="'$(RepositoryUrl)'=='' And '$(GITHUB_REPOSITORY)'!=''">https://github.com/$(GITHUB_REPOSITORY)</RepositoryUrl>
     <IsGitHubCI>True</IsGitHubCI>
 
-    <IncrementVersionType Condition="'$(IncrementVersionType)'==''">VersionTag</IncrementVersionType>
-    <VersionTag>$(GITHUB_REF_NAME)</VersionTag>
+    <IncrementVersionType Condition="'$(IncrementVersionType)'=='' And '$(GITHUB_REF_TYPE)'=='tag'">VersionTag</IncrementVersionType>
+    <IncrementVersionType Condition="'$(IncrementVersionType)'==''">SemVer</IncrementVersionType>
 
     <IsPackable>true</IsPackable>
 

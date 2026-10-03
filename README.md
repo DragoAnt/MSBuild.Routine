@@ -121,6 +121,18 @@ The system supports multiple versioning strategies:
 - **SemVer4**: Modified semantic versioning with build number(uses CI pipeline id as build number)
 - **VersionTag**: Uses Git tags for versioning
 
+On GitHub Actions the DragoAnt defaults pick the strategy from the ref:
+
+| Ref (`GITHUB_REF_TYPE` / `GITHUB_REF_NAME`) | Strategy     | Version                                                         |
+|---------------------------------------------|--------------|-----------------------------------------------------------------|
+| tag `v2.0.1` or `2.0.1`                     | `VersionTag` | `2.0.1` (a leading `v`/`V` is trimmed)                          |
+| branch `main`, PR `15/merge`, `test_old`    | `SemVer`     | `$(VersionPrefix)-<ref>.<run id>`, e.g. `1.0.0-15-merge.123456` |
+| local build (no `GITHUB_RUN_ID`)            | `DevEnv`     | `9999.0.0`                                                      |
+
+The prerelease part is the ref with every character outside `[0-9A-Za-z-]` replaced by `-`. A tag that is not valid SemVer 2.0 after trimming
+(e.g. `v2.0`) fails the build with an error naming the tag, instead of the silent `MSB4181` restore failure. Set `IncrementVersionType` in
+`Directory.Build.props`, before the `init.props` import, to force a strategy on CI.
+
 ## Security
 
 The repository includes support for managing secrets and sensitive information:

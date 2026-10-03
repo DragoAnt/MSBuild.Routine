@@ -1,4 +1,15 @@
-<Project InitialTargets="RestrictManualVersion">
+<Project InitialTargets="RestrictManualVersion;CheckVersionTagIsSemVer">
+
+  <PropertyGroup>
+    <SemVerRegex Condition="'$(SemVerRegex)'==''">^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(\+[0-9a-zA-Z-]+(\.[0-9a-zA-Z-]+)*)?$</SemVerRegex>
+  </PropertyGroup>
+
+  <!--    Restore reports an invalid version only as MSB4181 with no message; fail with the offending tag instead   -->
+  <Target Name="CheckVersionTagIsSemVer" Condition="'$(IncrementVersionType)'=='VersionTag'">
+    <Error Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('$(Version)', '$(SemVerRegex)'))"
+           Text="Version tag '$(VersionTag)' gives version '$(Version)', which is not a valid SemVer 2.0 version (MAJOR.MINOR.PATCH[-prerelease][+build], an optional leading 'v' is trimmed). Tag the release like 'v1.2.3'." />
+  </Target>
+
   <!--    Checks Project for setting Version manual in csproj if IncrementVersionType != Manual   -->
 
   <Target Name="RestrictManualVersion" Condition="'$(IncrementVersionType)'!='Manual'" BeforeTargets="Restore;Build;CoreCompile">
